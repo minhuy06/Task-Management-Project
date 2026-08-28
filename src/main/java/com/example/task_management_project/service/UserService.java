@@ -1,5 +1,7 @@
 package com.example.task_management_project.service;
 
+import com.example.task_management_project.dto.UserRequestDTO;
+import com.example.task_management_project.dto.UserResponseDTO;
 import com.example.task_management_project.entity.User;
 import com.example.task_management_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +60,29 @@ public class UserService {
     public void deleteUser(Long id){
         User existingUser = getUserById(id);
         userRepository.delete(existingUser);
+    }
+
+    // Mapping Entity to DTO (Response)
+    public UserResponseDTO mapToResponseDTO(User user){
+        UserResponseDTO dto = new UserResponseDTO();
+
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setStatus(user.isStatus());
+
+        return dto;
+    }
+
+    // Mapping DTO to Entity
+    public User mapToEntity(UserRequestDTO requestDTO){
+        User user = new User();
+
+        user.setUsername(requestDTO.getUsername());
+        user.setEmail(requestDTO.getEmail());
+        user.setPassword(requestDTO.getPassword());
+        user.setStatus(true);
+
+        return user;
     }
 }
