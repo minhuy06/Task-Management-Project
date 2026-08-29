@@ -1,5 +1,7 @@
 package com.example.task_management_project.service;
 
+import com.example.task_management_project.dto.TagRequestDTO;
+import com.example.task_management_project.dto.TagResponseDTO;
 import com.example.task_management_project.entity.Tag;
 import com.example.task_management_project.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,22 @@ public class TagService {
     public void deleteTag(Long id) {
         Tag existingTag = getTagById(id);
         tagRepository.delete(existingTag);
+    }
+
+    // Mapping Entity to DTO
+    public TagResponseDTO mapToResponseDTO(Tag tag){
+        TagResponseDTO responseDTO = new TagResponseDTO();
+        responseDTO.setId(tag.getId());
+        responseDTO.setName(tag.getName());
+
+        return responseDTO;
+    }
+
+    // Mapping DTO to Entity
+    public Tag mapToEntity(TagRequestDTO requestDTO){
+        Tag tag = new Tag();
+        tag.setName(requestDTO.getName());
+
+        return tag;
     }
 }
