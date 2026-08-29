@@ -1,5 +1,7 @@
 package com.example.task_management_project.service;
 
+import com.example.task_management_project.dto.CategoryRequestDTO;
+import com.example.task_management_project.dto.CategoryResponseDTO;
 import com.example.task_management_project.entity.Category;
 import com.example.task_management_project.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,23 @@ public class CategoryService {
     public void deleteCategory(Long id) {
         Category existingCategory = getCategoryById(id);
         categoryRepository.delete(existingCategory);
+    }
+
+    // Mapping Entity to DTO
+    public CategoryResponseDTO mapToResponseDTO(Category category){
+        CategoryResponseDTO responseDTO = new CategoryResponseDTO();
+
+        responseDTO.setId(responseDTO.getId());
+        responseDTO.setName(responseDTO.getName());
+
+        return responseDTO;
+    }
+
+    // Mapping DTO to Entity
+    public Category mapToEntity(CategoryRequestDTO requestDTO){
+        Category category = new Category();
+        category.setName(requestDTO.getName());
+
+        return category;
     }
 }
