@@ -1,5 +1,7 @@
 package com.example.task_management_project.service;
 
+import com.example.task_management_project.dto.TaskRequestDTO;
+import com.example.task_management_project.dto.TaskResponseDTO;
 import com.example.task_management_project.entity.Task;
 import com.example.task_management_project.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,29 @@ public class TaskService {
     public void deleteTask(Long id) {
         Task existingTask = getTaskById(id);
         taskRepository.delete(existingTask);
+    }
+
+    // Mapping Entity to DTO
+    public TaskResponseDTO mapToResponseDTO(Task task){
+        TaskResponseDTO responseDTO = new TaskResponseDTO();
+
+        responseDTO.setId(task.getId());
+        responseDTO.setTitle(task.getTitle());
+        responseDTO.setDescription(task.getDescription());
+        responseDTO.setCompleted(task.isCompleted());
+        responseDTO.setDueDate(task.getDueDate());
+
+        return responseDTO;
+    }
+
+    // Mapping DTO to Entity
+    public Task mapToEntity(TaskRequestDTO requestDTO){
+        Task task = new Task();
+
+        task.setTitle(requestDTO.getTitle());
+        task.setDescription(requestDTO.getDescription());
+        task.setDueDate(requestDTO.getDueDate());
+
+        return task;
     }
 }
