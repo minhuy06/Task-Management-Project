@@ -1,58 +1,95 @@
 package com.example.task_management_project.service;
 
+import com.example.task_management_project.dto.CategoryResponseDTO;
+import com.example.task_management_project.dto.TagResponseDTO;
 import com.example.task_management_project.dto.TaskRequestDTO;
 import com.example.task_management_project.dto.TaskResponseDTO;
+import com.example.task_management_project.entity.Category;
+import com.example.task_management_project.entity.Tag;
 import com.example.task_management_project.entity.Task;
+import com.example.task_management_project.repository.CategoryRepository;
+import com.example.task_management_project.repository.TagRepository;
 import com.example.task_management_project.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository){
+    public TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository, TagRepository tagRepository){
         this.taskRepository = taskRepository;
+        this.categoryRepository = categoryRepository;
+        this.tagRepository = tagRepository;
     }
 
     // Get all task
-    public List<Task> getAllTask(){
-        return taskRepository.findAll();
+    public List<TaskResponseDTO> getAllTask(){
+        return taskRepository.findAll()
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    // Get task by Id
-    public Task getTaskById(Long id){
-        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found with Id: "+id));
+    // Get task by id
+    public TaskResponseDTO getTaskById(Long id){
+        Task task = getTaskEntityById(id);
+        return mapToResponseDTO(task);
     }
 
     // Create new task
-    public Task createTask(Task task){
-        return taskRepository.save(task);
+    public TaskResponseDTO createTask(TaskRequestDTO requestDTO){
+        Task newTask = mapToEntity(requestDTO);
+        Task createdTask = taskRepository.save(newTask);
+        return mapToResponseDTO(createdTask);
     }
 
     // Update task
-    public Task updateTask(Long id, Task taskDetails){
-        Task existingTask = getTaskById(id);
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO requestDTO){
+        Task existingTask = getTaskEntityById(id);
 
-        existingTask.setTitle(taskDetails.getTitle());
-        existingTask.setDescription(taskDetails.getDescription());
+        existingTask.setTitle(requestDTO.getTitle());
+        existingTask.setDescription(requestDTO.getDescription());
+        existingTask.setCompleted(requestDTO.isCompleted());
+        existingTask.setDueDate(requestDTO.getDueDate());
 
-        existingTask.setCompleted(taskDetails.isCompleted());
+        // Update new category
+        if(requestDTO.getCategoryId() != null ){
+            Category category = categoryRepository.findById(requestDTO.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        existingTask.setCategory(taskDetails.getCategory());
-        existingTask.setTags(taskDetails.getTags());
+            existingTask.setCategory(category);
+        }
 
-        return taskRepository.save(existingTask);
+        // Update new tags
+        if(requestDTO.getTagIds() != null && !requestDTO.getTagIds().isEmpty()){
+            List<Tag> tags = tagRepository.findAllById(requestDTO.getTagIds());
+            existingTask.setTags(tags);
+        }
+        else{
+            existingTask.setTags(null);
+        }
+
+        Task updatedTask = taskRepository.save(existingTask);
+        return mapToResponseDTO(updatedTask);
     }
 
     // Delete task
     public void deleteTask(Long id) {
-        Task existingTask = getTaskById(id);
+        Task existingTask = getTaskEntityById(id);
         taskRepository.delete(existingTask);
+    }
+
+    // Get task by Id (internal)
+    public Task getTaskEntityById(Long id){
+        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found with Id: "+id));
     }
 
     // Mapping Entity to DTO
@@ -65,6 +102,19 @@ public class TaskService {
         responseDTO.setCompleted(task.isCompleted());
         responseDTO.setDueDate(task.getDueDate());
 
+        if(task.getCategory() != null){
+            CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+            categoryResponseDTO.setId(task.getCategory().getId());
+            categoryResponseDTO.setName(task.getCategory().getName());
+            categoryResponseDTO.setCount(0L);
+
+            responseDTO.setCategoryResponseDTO(categoryResponseDTO);
+        }
+
+        if(task.getTags() != null){
+            List<TagResponseDTO> tagResponseDTOS = 
+        }
+
         return responseDTO;
     }
 
@@ -75,6 +125,20 @@ public class TaskService {
         task.setTitle(requestDTO.getTitle());
         task.setDescription(requestDTO.getDescription());
         task.setDueDate(requestDTO.getDueDate());
+        task.setCompleted(requestDTO.isCompleted());
+
+        // Get category entity by categoryId
+        if(requestDTO.getCategoryId() != null){
+            Category category = categoryRepository.findById(requestDTO.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            task.setCategory(category);
+        }
+
+        // Get list<Tag> by list<tagId>
+        if(requestDTO.getTagIds() != null && !requestDTO.getTagIds().isEmpty()){
+            List<Tag> tags = tagRepository.findAllById(requestDTO.getTagIds());
+            task.setTags(tags);
+        }
 
         return task;
     }
