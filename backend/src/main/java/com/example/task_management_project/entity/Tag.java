@@ -25,6 +25,9 @@ public class Tag {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
+    @Column(nullable = false)
+    private String color;
+
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     private List<Task> tasks = new ArrayList<>();

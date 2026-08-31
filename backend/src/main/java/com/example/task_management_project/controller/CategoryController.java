@@ -26,37 +26,29 @@ public class CategoryController {
     // Get all category
     @GetMapping
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategory(){
-        List<CategoryResponseDTO> responseDTOS = categoryService.getAllCategories()
-                .stream()
-                .map(categoryService::mapToResponseDTO)
-                .collect(Collectors.toList());
-
+        List<CategoryResponseDTO> responseDTOS = categoryService.getAllCategories();
         return ResponseEntity.ok(responseDTOS);
     }
 
     // Get category by id
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long id){
-        Category category = categoryService.getCategoryById(id);
-        return ResponseEntity.ok(categoryService.mapToResponseDTO(category));
+        CategoryResponseDTO responseDTO = categoryService.mapToResponseDTO(categoryService.getCategoryById(id));
+        return ResponseEntity.ok(responseDTO);
     }
 
     // Create new category
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody CategoryRequestDTO requestDTO){
-        Category category = categoryService.mapToEntity(requestDTO);
-        Category savedCategory = categoryService.createCategory(category);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.mapToResponseDTO(savedCategory));
+        CategoryResponseDTO createdCategory = categoryService.createCategory(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
 
     // Update category
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryRequestDTO requestDTO){
-        Category categoryDetail = categoryService.mapToEntity(requestDTO);
-        Category updatedCategory = categoryService.updateCategory(id, categoryDetail);
-
-        return ResponseEntity.ok(categoryService.mapToResponseDTO(updatedCategory));
+        CategoryResponseDTO updatedCategory = categoryService.updateCategory(id, requestDTO);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     // Delete category

@@ -20,27 +20,25 @@ public class CategoryService {
     }
 
     // Get all category
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }
-
-    // Get category by Id
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+    public List<CategoryResponseDTO> getAllCategories() {
+        return categoryRepository.findAllCategoriesWithTaskCount();
     }
 
     // Create new category
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryResponseDTO createCategory(CategoryRequestDTO requestDTO) {
+        Category category = mapToEntity(requestDTO);
+        Category savedCategory = categoryRepository.save(category);
+
+        return mapToResponseDTO(savedCategory);
     }
 
     // Update category
-    public Category updateCategory(Long id, Category categoryDetails) {
+    public CategoryResponseDTO updateCategory(Long id, CategoryRequestDTO categoryRequestDTO) {
         Category existingCategory = getCategoryById(id);
-        existingCategory.setName(categoryDetails.getName());
+        existingCategory.setName(categoryRequestDTO.getName());
+        Category updatedCategory = categoryRepository.save(existingCategory);
 
-        return categoryRepository.save(existingCategory);
+        return mapToResponseDTO(updatedCategory);
     }
 
     // Delete category
@@ -49,12 +47,19 @@ public class CategoryService {
         categoryRepository.delete(existingCategory);
     }
 
+    // Get category by Id
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+    }
+
     // Mapping Entity to DTO
     public CategoryResponseDTO mapToResponseDTO(Category category){
         CategoryResponseDTO responseDTO = new CategoryResponseDTO();
 
         responseDTO.setId(responseDTO.getId());
         responseDTO.setName(responseDTO.getName());
+        responseDTO.setCount(0L);
 
         return responseDTO;
     }

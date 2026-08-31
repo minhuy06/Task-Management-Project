@@ -3,6 +3,7 @@ package com.example.task_management_project.service;
 import com.example.task_management_project.dto.TagRequestDTO;
 import com.example.task_management_project.dto.TagResponseDTO;
 import com.example.task_management_project.entity.Tag;
+import com.example.task_management_project.entity.Task;
 import com.example.task_management_project.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,26 @@ public class TagService {
     }
 
     // Get all tag
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
-    }
-
-    // Get tag by Id
-    public Tag getTagById(Long id) {
-        return tagRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+    public List<TagResponseDTO> getAllTags() {
+        return tagRepository.findAllTagsWithTaskCount();
     }
 
     // Create new tag
-    public Tag createTag(Tag tag) {
-        return tagRepository.save(tag);
+    public TagResponseDTO createTag(TagRequestDTO requestDTO) {
+        Tag newTag = mapToEntity(requestDTO);
+        Tag createdTag = tagRepository.save(newTag);
+
+        return mapToResponseDTO(createdTag);
     }
 
     // Update tag
-    public Tag updateTag(Long id, Tag tagDetails) {
+    public TagResponseDTO updateTag(Long id, TagRequestDTO requestDTO) {
         Tag existingTag = getTagById(id);
-        existingTag.setName(tagDetails.getName());
+        existingTag.setName(requestDTO.getName());
+        existingTag.setColor(requestDTO.getColor());
 
-        return tagRepository.save(existingTag);
+        Tag updatedTag = tagRepository.save(existingTag);
+        return mapToResponseDTO(updatedTag);
     }
 
     // Delete tag
@@ -49,11 +49,20 @@ public class TagService {
         tagRepository.delete(existingTag);
     }
 
+    // Get tag by Id
+    public Tag getTagById(Long id) {
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+    }
+
     // Mapping Entity to DTO
     public TagResponseDTO mapToResponseDTO(Tag tag){
         TagResponseDTO responseDTO = new TagResponseDTO();
+
         responseDTO.setId(tag.getId());
         responseDTO.setName(tag.getName());
+        responseDTO.setColor(tag.getColor());
+        responseDTO.setCount(0L);
 
         return responseDTO;
     }
@@ -62,6 +71,7 @@ public class TagService {
     public Tag mapToEntity(TagRequestDTO requestDTO){
         Tag tag = new Tag();
         tag.setName(requestDTO.getName());
+        tag.setColor(requestDTO.getColor());
 
         return tag;
     }

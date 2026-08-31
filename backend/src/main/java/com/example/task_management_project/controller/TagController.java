@@ -26,37 +26,29 @@ public class TagController {
     // Get all tag
     @GetMapping
     public ResponseEntity<List<TagResponseDTO>> getAllTag(){
-        List<TagResponseDTO> responseDTOS = tagService.getAllTags()
-                .stream()
-                .map(tagService::mapToResponseDTO)
-                .collect(Collectors.toList());
-
+        List<TagResponseDTO> responseDTOS = tagService.getAllTags();
         return ResponseEntity.ok(responseDTOS);
     }
 
     // Get tag by id
     @GetMapping("/{id}")
     public ResponseEntity<TagResponseDTO> getTagById(@PathVariable Long id){
-        Tag tag = tagService.getTagById(id);
-        return ResponseEntity.ok(tagService.mapToResponseDTO(tag));
+        TagResponseDTO responseDTO = tagService.mapToResponseDTO(tagService.getTagById(id));
+        return ResponseEntity.ok(responseDTO);
     }
 
     // Create new tag
     @PostMapping
     public ResponseEntity<TagResponseDTO> createTag(@RequestBody TagRequestDTO requestDTO){
-        Tag tag = tagService.mapToEntity(requestDTO);
-        Tag savedTag = tagService.createTag(tag);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(tagService.mapToResponseDTO(savedTag));
+        TagResponseDTO responseDTO = tagService.createTag(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     // Update tag
     @PutMapping("/{id}")
     public ResponseEntity<TagResponseDTO> updateTag(@PathVariable Long id, @RequestBody TagRequestDTO requestDTO){
-        Tag tagDetail = tagService.mapToEntity(requestDTO);
-        Tag savedTag = tagService.updateTag(id, tagDetail);
-
-        return ResponseEntity.ok(tagService.mapToResponseDTO(savedTag));
+        TagResponseDTO updatedTag = tagService.updateTag(id, requestDTO);
+        return ResponseEntity.ok(updatedTag);
     }
 
     // Delete tag

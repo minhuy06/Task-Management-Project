@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class TagRequestDTO {
     private String name;
+    private String color;
 }
