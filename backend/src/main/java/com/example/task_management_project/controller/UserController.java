@@ -26,38 +26,30 @@ public class UserController {
     // Get all user
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUser(){
-        List<UserResponseDTO> response = userService.getAllUsers()
-                .stream()
-                .map(userService::mapToResponseDTO)
-                .collect(Collectors.toList());
-
+        List<UserResponseDTO> response = userService.getAllUsers();
         return ResponseEntity.ok(response);
     }
 
     // Get user by id
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUerById(@PathVariable Long id){
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(userService.mapToResponseDTO(user));
+        UserResponseDTO responseDTO = userService.getUserById(id);
+        return ResponseEntity.ok(responseDTO);
     }
-
+    
+    @PostMapping
     // Create user
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO requestDTO){
-        User user = userService.mapToEntity(requestDTO);
-        User savedUser = userService.createUser(user);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.mapToResponseDTO(savedUser));
+        UserResponseDTO savedUser = userService.createUser(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     // Update user
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserRequestDTO requestDTO){
-        User userDetail = userService.mapToEntity(requestDTO);
-        User updatedUser = userService.updateUser(id, userDetail);
-
-        return ResponseEntity.ok(userService.mapToResponseDTO(updatedUser));
+        UserResponseDTO responseDTO = userService.updateUser(id, requestDTO);
+        return ResponseEntity.ok(responseDTO);
     }
-    @PostMapping
 
     // Delete user
     @DeleteMapping("/{id}")
