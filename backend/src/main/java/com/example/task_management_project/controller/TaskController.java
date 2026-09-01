@@ -26,38 +26,29 @@ public class TaskController {
     // Get all task
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>> getAllTask(){
-
-        List<TaskResponseDTO> responseDTOS = taskService.getAllTask()
-                .stream()
-                .map(taskService::mapToResponseDTO)
-                .collect(Collectors.toList());
-
+        List<TaskResponseDTO> responseDTOS = taskService.getAllTask();
         return ResponseEntity.ok(responseDTOS);
     }
 
     // Get task by id
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id){
-        Task task = taskService.getTaskById(id);
-        return ResponseEntity.ok(taskService.mapToResponseDTO(task));
+        TaskResponseDTO responseDTO = taskService.getTaskById(id);
+        return ResponseEntity.ok(responseDTO);
     }
 
     // Create new task
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(@RequestBody TaskRequestDTO requestDTO){
-        Task task = taskService.mapToEntity(requestDTO);
-        Task savedTask = taskService.createTask(task);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.mapToResponseDTO(savedTask));
+        TaskResponseDTO responseDTO = taskService.createTask(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     // Update task
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskRequestDTO requestDTO){
-        Task taskDetail = taskService.mapToEntity(requestDTO);
-        Task updatedTask = taskService.updateTask(id, taskDetail);
-
-        return ResponseEntity.ok(taskService.mapToResponseDTO(updatedTask));
+        TaskResponseDTO responseDTO = taskService.updateTask(id, requestDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 
     // Delete task

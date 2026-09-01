@@ -112,7 +112,16 @@ public class TaskService {
         }
 
         if(task.getTags() != null){
-            List<TagResponseDTO> tagResponseDTOS = 
+            List<TagResponseDTO> tagResponseDTOS = task.getTags().stream().map(tag -> {
+                TagResponseDTO tagResponseDTO = new TagResponseDTO();
+                tagResponseDTO.setId(tag.getId());
+                tagResponseDTO.setName(tag.getName());
+                tagResponseDTO.setColor(tag.getColor());
+                tagResponseDTO.setCount(0L);
+                return tagResponseDTO;
+            }).collect(Collectors.toList());
+
+            responseDTO.setTagResponseDTOS(tagResponseDTOS);
         }
 
         return responseDTO;
