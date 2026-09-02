@@ -21,7 +21,7 @@ const Slibar = () => {
         fetchTag()
     }, []);
 
-    const fectCategory = async () => {
+    const fetchCategory = async () => {
         try{
             const response = await fetch('http://localhost:8080/api/categories')
             const data = await response.json()
@@ -53,7 +53,7 @@ const Slibar = () => {
 
             if(response.ok){
                 const newCategory = await response.json()
-                setNewCategoryName([...categories, newCategory])
+                setCategories([...categories, newCategory])
                 setNewCategoryName('')
                 setIsCategoryPopupOpen(false)
             }
@@ -150,7 +150,7 @@ const Slibar = () => {
                                 />
                                 <div className="popup-actions">
                                     <button type="submit" className="btn-save">Save</button>
-                                    <button type="button" className="btn-cancel" onClick={() => setIsPopupOpen(false)}>Cancel</button>
+                                    <button type="button" className="btn-cancel" onClick={() => setIsCategoryPopupOpen(false)}>Cancel</button>
                                 </div>
                             </form>
                         </div>
