@@ -132,6 +132,9 @@ const Slibar = () => {
                         </span>
                     </li>
                 ))}
+                <button className="btn-add" onClick={() => setIsTagPopupOpen(true)}>
+                    + Add Tag
+                </button>
             </div>
 
             {/* Popup create Category */}
@@ -191,4 +194,4 @@ const Slibar = () => {
         </div>
     )
 }
-export default Sidebar;
+export default Slibar;

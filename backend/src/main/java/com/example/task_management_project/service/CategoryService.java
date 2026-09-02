@@ -57,8 +57,8 @@ public class CategoryService {
     public CategoryResponseDTO mapToResponseDTO(Category category){
         CategoryResponseDTO responseDTO = new CategoryResponseDTO();
 
-        responseDTO.setId(responseDTO.getId());
-        responseDTO.setName(responseDTO.getName());
+        responseDTO.setId(category.getId());
+        responseDTO.setName(category.getName());
         responseDTO.setCount(0L);
 
         return responseDTO;

@@ -1,0 +1,59 @@
+### =========================================
+### 1. THÊM DỮ LIỆU CATEGORY (DANH MỤC)
+### =========================================
+
+### Tạo Category: Công việc nhà
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "Công việc nhà"
+}
+
+### Tạo Category: Học tập
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "Học tập"
+}
+
+### Tạo Category: Dự án cá nhân
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "Dự án cá nhân"
+}
+
+
+### =========================================
+### 2. THÊM DỮ LIỆU TAG (THẺ)
+### =========================================
+
+### Tạo Tag: Khẩn cấp (Màu đỏ)
+POST http://localhost:8080/api/tags
+Content-Type: application/json
+
+{
+  "name": "Khẩn cấp",
+  "color": "#ff4d4f"
+}
+
+### Tạo Tag: Quan trọng (Màu cam)
+POST http://localhost:8080/api/tags
+Content-Type: application/json
+
+{
+  "name": "Quan trọng",
+  "color": "#fa8c16"
+}
+
+### Tạo Tag: Thư giãn (Màu xanh lá)
+POST http://localhost:8080/api/tags
+Content-Type: application/json
+
+{
+  "name": "Thư giãn",
+  "color": "#52c41a"
+}

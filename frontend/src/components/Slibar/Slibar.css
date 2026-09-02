@@ -1,0 +1,141 @@
+.slibar {
+    width: 260px;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: auto;
+}
+
+.slibar h3 {
+    font-size: 14px;
+    color: #6c757d;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+    margin: 20px 0;
+}
+
+.slibar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.slibar li {
+    margin: 10px 0;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.slibar li:hover {
+    color: #007bff;
+}
+
+.tag-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+}
+
+.btn-add {
+    background: transparent;
+    border: none;
+    color: #007bff;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+}
+
+.btn-add:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.popup-content h4 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #333;
+}
+
+.popup-content input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-save, .btn-cancel {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+.btn-cancel {
+    background-color: #f1f3f5;
+    color: #333;
+}
+
+.btn-cancel:hover {
+    background-color: #e2e6ea;
+}
