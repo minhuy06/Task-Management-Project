@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import './Slibar.css'
+import { FiMenu, FiSettings, FiUser, FiFolder, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { MdOutlineDashboard, MdOutlineTaskAlt, MdOutlineCalendarToday } from 'react-icons/md';
 
 const Slibar = () => {
 
