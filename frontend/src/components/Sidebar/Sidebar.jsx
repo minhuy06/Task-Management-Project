@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import './Slibar.css'
+import './Sidebar.css'
 import { FiMenu, FiSettings, FiUser, FiFolder, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { MdOutlineDashboard, MdOutlineTaskAlt, MdOutlineCalendarToday } from 'react-icons/md';
 
-const Slibar = () => {
+const Sidebar = () => {
 
     // State
     const [categories, setCategories] = useState([])
@@ -196,4 +196,4 @@ const Slibar = () => {
         </div>
     )
 }
-export default Slibar;
+export default Sidebar;
