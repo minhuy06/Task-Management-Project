@@ -1,13 +1,23 @@
 import { useState } from 'react';
 import './LoginPage.css';
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
+    // error state
+    const [errorMessage, setErrorMessage] = useState('')
+
+    const navigate = useNavigate()
+
     const handleLogin = (e) => {
-        e.preventDefault();
-        console.log("Data prepared for submission to the backend: ", { username, password });
+        e.preventDefault()
+        setErrorMessage('')
+
+        try{
+
+        }
     }
 
     return (

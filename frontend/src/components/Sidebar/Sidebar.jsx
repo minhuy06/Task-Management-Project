@@ -5,7 +5,7 @@ import { MdOutlineDashboard, MdOutlineTaskAlt, MdOutlineCalendarToday } from 're
 
 const Sidebar = () => {
 
-    // State
+    // Data States
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])
 
@@ -16,7 +16,11 @@ const Sidebar = () => {
     // State for tag form
     const [isTagPopupOpen, setIsTagPopupOpen] = useState(false)
     const [newTagName, setNewTagName] = useState('')
-    const [newTagColor, setNewTagColor] = useState('007bff') // default green
+    const [newTagColor, setNewTagColor] = useState('#007bff') // default green
+
+    // Sidebar States
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(true)
+    const [isTagsOpen, setIsTagsOpen] = useState(true)
 
     useEffect(() => {
         fetchCategory()
@@ -78,13 +82,15 @@ const Sidebar = () => {
                 const newTag = await response.json()
                 setTags([...tags, newTag])
                 setNewTagName('')
-                setNewTagColor('007bff')
+                setNewTagColor('#007bff')
                 setIsTagPopupOpen(false)
             }
         } catch (error){
             console.error("Can't create a new Tag")
         }
     }
+
+
 
     return(
         <div className="slibar">
