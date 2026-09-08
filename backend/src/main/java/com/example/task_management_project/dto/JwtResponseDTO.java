@@ -13,4 +13,9 @@ public class JwtResponseDTO {
     private String token;
     private String type = "Bearer";
     private String username;
+
+    public JwtResponseDTO(String token, String username){
+        this.token = token;
+        this.username = username;
+    }
 }
