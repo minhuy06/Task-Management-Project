@@ -2,7 +2,7 @@ package com.example.task_management_project.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class JwtUtils {
 
     // Gen token
     public String generateJwtToken(Authentication authentication){
-        UserDetails userPrincipal = (UserDetails) authentication.getPricipal();
+        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
