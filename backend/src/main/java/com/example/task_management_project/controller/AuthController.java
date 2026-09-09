@@ -54,7 +54,7 @@ public class AuthController {
 
         // check duplicate username
         if (userRepository.existsByUsername(requestDTO.getUsername())) {
-            return ResponseEntity.badRequest().body("Lỗi: Tên đăng nhập đã tồn tại!");
+            return ResponseEntity.badRequest().body("User name is already exist");
         }
 
         // create new user
@@ -66,6 +66,6 @@ public class AuthController {
         // save to database
         userRepository.save(user);
 
-        return ResponseEntity.ok("Đăng ký tài khoản thành công!");
+        return ResponseEntity.ok("Register successfully");
     }
 }

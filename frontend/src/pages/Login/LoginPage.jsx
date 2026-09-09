@@ -11,12 +11,30 @@ const LoginPage = () => {
 
     const navigate = useNavigate()
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
         setErrorMessage('')
 
         try{
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
 
+            if(response.ok){
+                const data = await response.json()
+
+                localStorage.setItem('token', data.token)
+                localStorage.setItem('username', data.username)
+                navigate('/tasks')
+            }
+            else{
+                setErrorMessage("User name or Password is incorrect")
+            }
+
+        } catch (error){
+            setErrorMessage("Unable to connect to server")
         }
     }
 
@@ -29,6 +47,8 @@ const LoginPage = () => {
                 </div>
 
                 <h2 className="login-title">LOGIN</h2>
+
+                {errorMessage && <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontWeight: 'bold' }}>{errorMessage}</div>}
 
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
@@ -70,7 +90,7 @@ const LoginPage = () => {
                 </form>
 
                 <div className="signup-text">
-                    Don't have an account? <a href="#" className="signup-link">Sign Up</a>
+                    Don't have an account? <Link to="/register" className="signup-link">Sign Up</Link>
                 </div>
 
                 <div className="social-login">

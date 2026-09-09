@@ -1,6 +1,42 @@
-### =========================================
-### 1. THÊM DỮ LIỆU CATEGORY (DANH MỤC)
-### =========================================
+### Register
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@gmail.com",
+  "password": "123456password"
+}
+
+> {%
+    client.test("Đăng ký thành công", function() {
+        client.assert(response.status === 200, "Mã phản hồi không phải 200");
+    });
+%}
+
+### 2. ĐĂNG NHẬP VÀ LẤY TOKEN
+# Chạy Request này, sau đó copy chuỗi Token trong mục "token" ở kết quả trả về
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456password"
+}
+
+> {%
+    client.test("Đăng nhập thành công và có Token", function() {
+        client.assert(response.status === 200, "Sai thông tin đăng nhập");
+        // Tự động lưu token vào biến môi trường của IntelliJ để dùng cho bước 3
+        client.global.set("auth_token", response.body.token);
+    });
+%}
+
+### 3. TEST TRUY CẬP VÀO KHU VỰC BẢO MẬT BẰNG TOKEN
+# Thử gọi vào API lấy danh sách user.
+# Biến {{auth_token}} sẽ tự động lấy Token vừa sinh ra ở Bước 2 đắp vào đây.
+GET http://localhost:8080/api/users
+Authorization: Bearer {{auth_token}}
 
 ### Tạo Category: Công việc nhà
 POST http://localhost:8080/api/categories
