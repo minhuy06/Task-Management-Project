@@ -6,7 +6,6 @@ import com.example.task_management_project.dto.UserRequestDTO;
 import com.example.task_management_project.entity.User;
 import com.example.task_management_project.repository.UserRepository;
 import com.example.task_management_project.security.JwtUtils;
-import com.example.task_management_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +26,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepositor){
+    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserRepository userRepositor, PasswordEncoder passwordEncoder){
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.userRepository = userRepositor;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -55,13 +57,13 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Lỗi: Tên đăng nhập đã tồn tại!");
         }
 
-        // 2. Tạo User mới từ DTO của bạn
+        // create new user
         User user = new User();
         user.setUsername(requestDTO.getUsername());
         user.setEmail(requestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
 
-        // 3. Lưu xuống DB
+        // save to database
         userRepository.save(user);
 
         return ResponseEntity.ok("Đăng ký tài khoản thành công!");
