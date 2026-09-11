@@ -18,7 +18,11 @@ const TaskItem = ({task, isSelected, onSelect}) => {
 
             <div className="task-item-right">
                 {task.tags.map(tag => (
-                    <span key={tag.id} className={`tag-pill tag-${tag.color}`}>#{tag.name}</span>
+                    <span key={tag.id}
+                          className="tag-pill"
+                          style={{backgroundColor:tag.color, color:'#ffffff'}}>
+                        #{tag.name}
+                    </span>
                 ))}
             </div>
         </div>
