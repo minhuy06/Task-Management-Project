@@ -38,3 +38,4 @@ const TaskFilter = ({filters, onFilterChange, categories, tags}) => {
         </div>
     )
 }
+export default TaskFilter

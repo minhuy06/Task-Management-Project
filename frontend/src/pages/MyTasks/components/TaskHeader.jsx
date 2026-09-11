@@ -8,3 +8,4 @@ const TaskHeader = ({activeCount, onNewTask}) => {
         </div>
     )
 }
+export default TaskHeader

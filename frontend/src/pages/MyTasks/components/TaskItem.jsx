@@ -24,3 +24,4 @@ const TaskItem = ({task, isSelected, onSelect}) => {
         </div>
     )
 }
+export default TaskItem
