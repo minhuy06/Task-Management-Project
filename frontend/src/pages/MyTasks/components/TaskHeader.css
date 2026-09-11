@@ -1,0 +1,28 @@
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+.task-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+.task-header h2 span {
+    font-size: 16px;
+    color: #666;
+    font-weight: normal;
+}
+.btn-new-task {
+    background-color: #4a729e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-new-task:hover { background-color: #3b5c80; }

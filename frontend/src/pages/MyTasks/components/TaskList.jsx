@@ -16,21 +16,20 @@ const TaskList = ({title, tasks, selectedTaskIds, onSelectTask, isCollapsible = 
                 {isCollapsible && <span className="count-badge">{tasks.length}</span>}
             </div>
 
-            {isOpen && (
-                <div className="task-items-container">
-                    {tasks.length === 0 ? (
-                        <p className="empty-text">Don't have any task</p>
-                    ) : (
-                        tasks.map(task => (
-                            <TaskItem key={task.id}
-                                      task={task}
-                                      isSelected={selectedTaskIds.includes(task.id)}
-                                      onSelect={onSelectTask}
-                            />
-                        ))
-                    )}
-                </div>
-            )}
+            <div className={`task-items-container ${isOpen ? 'expanded' : 'collapsed'}`}>
+                {tasks.length === 0 ? (
+                    <p className="empty-text">Don't have any task</p>
+                ) : (
+                    tasks.map(task => (
+                        <TaskItem key={task.id}
+                                  task={task}
+                                  isSelected={selectedTaskIds.includes(task.id)}
+                                  onSelect={onSelectTask}
+                        />
+                    ))
+                )}
+            </div>
+            )
         </div>
     );
 }
