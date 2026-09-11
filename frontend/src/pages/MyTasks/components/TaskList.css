@@ -1,0 +1,37 @@
+.task-list-section {
+    margin-bottom: 30px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+}
+.task-list-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.cursor-pointer { cursor: pointer; }
+.collapse-icon {
+    font-weight: bold;
+    font-size: 18px;
+    width: 15px;
+}
+.task-list-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+.count-badge {
+    background: #e0e0e0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* Slide effect */
+.task-items-container {
+    display: grid;
+    transition: grid-template-rows 0.3s ease-out;
+}
+.task-items-container.expanded { grid-template-rows: 1fr; }
+.task-items-container.collapsed { grid-template-rows: 0fr; }
+.task-items-container > div { overflow: hidden; }
