@@ -111,5 +111,10 @@ const MyTasksPage = () => {
         }
     }
 
-
+    return (
+        <div className="my-tasks-page">
+            <TaskHeader activeCount={todoTasks.length}
+            onNewTask={() => setIsCreateModalOpen(true)}/>
+        </div>
+    )
 }
