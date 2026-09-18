@@ -80,4 +80,86 @@ const TaskFormModal = ({onSubmit, onClose}) => {
         }
         onSubmit(formData)
     }
+
+    if(isLoadingForm){
+        return(
+            <div className="modal-overlay">
+                <div className="modal-content loading-spinner">Loading data ...</div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h3>Create new Task</h3>
+                <button className="btn-close-icon" onClick={onClose}>&times;</button>
+            </div>
+
+            {fetchError && <div className="error-banner">{fetchError}</div>}
+
+            <form onSubmit={handleSubmit} className="task-form">
+                {/* title input */}
+                <div className="form-group">
+                    <label>Title<span className="text-red">*</span></label>
+                    <input
+                        type="text"
+                        name="title"
+                        value{formData.title}
+                        onChange={handleChange}
+                        placeholder="Task name..."
+                        autoFocus=/>
+                </div>
+
+                {/* category input and due date */}
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>Category</label>
+                        <select name="category" value={formData.category} onChange={handleChange}>
+                            {availableCategories.map(cat => (
+                                <option key={cat.id} value={cat.name}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Due date</label>
+                        <input
+                            type="date"
+                            name="dueDate"
+                            value={formData.dueDate}
+                            onChange={handleChange}/>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Tags</label>
+                    <div className="tags-selection-container">
+                        {availableTags.map(tag => {
+                            const isSelected = formData.tagIds.includes(tag.id)
+                            return(
+                                <span
+                                    key={tag.id}
+                                    className={`tag-option ${isSelected ? 'selected' : ''}`}
+                                    style={{
+                                        backgroundColor: isSelected ? tag.color : '#f0f0f0',
+                                        borderColor: isSelected ? '#ccc' : 'transparent'
+                                    }}
+                                    onClick={() => handleToggleTag(tag.id)}>
+                                #{tag.name}
+                                </span>
+                            )
+                        })}
+                    </div>
+                </div>
+                <div className="modal-actions">
+                    <button type="button" className="btn-cancel" onClick={onClose}>Hủy bỏ</button>
+                    <button type="submit" className="btn-submit">Lưu công việc</button>
+                </div>
+            </form>
+        </div>
+    )
 }
+export default TaskFormModal
