@@ -154,9 +154,21 @@ const TaskFormModal = ({onSubmit, onClose}) => {
                         })}
                     </div>
                 </div>
+
+                <div className="form-group">
+                    <label>Description</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Description..."
+                        rows="3"
+                    />
+                </div>
+
                 <div className="modal-actions">
-                    <button type="button" className="btn-cancel" onClick={onClose}>Hủy bỏ</button>
-                    <button type="submit" className="btn-submit">Lưu công việc</button>
+                    <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
+                    <button type="submit" className="btn-submit">Save</button>
                 </div>
             </form>
         </div>
