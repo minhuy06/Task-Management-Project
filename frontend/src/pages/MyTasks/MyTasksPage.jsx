@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import TaskHeader from './components/TaskHeader'
 import TaskFilter from './components/TaskFilter';
 import TaskList from './components/TaskList';
+import TaskFormModal from './components/TaskFormModal'
 import './MyTasksPage.css';
 
 const MyTasksPage = () => {
@@ -16,8 +17,8 @@ const MyTasksPage = () => {
     const [error, setError] = useState(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-    const todoTasks = tasks.filters(task => !task.isCompleted)
-    const completedTasks = tasks.filters(task => task.isCompleted)
+    const todoTasks = tasks.filter(task => !task.isCompleted)
+    const completedTasks = tasks.filter(task => task.isCompleted)
 
     const fetchTasks = async () => {
         try{
@@ -64,7 +65,7 @@ const MyTasksPage = () => {
                 return prevIds.filter(id => id !== taskId)
             }
 
-            return [...prevIds, tasksId]
+            return [...prevIds, taskId]
         })
     }
 
@@ -75,7 +76,7 @@ const MyTasksPage = () => {
             const response = await fetch('http://localhost:8080/api/tasks/batch-complete', {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({tagIds: selectedTaskIds})
+                body: JSON.stringify({taskIds: selectedTaskIds})
             })
 
             if(response.ok){
@@ -115,6 +116,46 @@ const MyTasksPage = () => {
         <div className="my-tasks-page">
             <TaskHeader activeCount={todoTasks.length}
             onNewTask={() => setIsCreateModalOpen(true)}/>
+
+            {error && <div className="error-banner">{error}</div>}
+
+            <TaskFilter
+                filters={filters}
+                onFilterChange={handleFilterChange}
+            />
+
+            {selectedTaskIds.length > 0 && (
+                <div className="batch-actions" style={{ marginBottom: '20px' }}>
+                    <button onClick={handleBatchComplete} className="btn-new-task">
+                        Complete ({selectedTaskIds.length})
+                    </button>
+                </div>
+            )}
+
+            <div className="task-lists-container">
+                <TaskList
+                    title="To do"
+                    tasks={todoTasks}
+                    selectedIds={selectedTaskIds}
+                    onSelectTask={handleSelectTask}
+                />
+
+                {completedTasks.length > 0 && (
+                    <TaskList
+                        title="Completed"
+                        tasks={completedTasks}
+                        selectedIds={selectedTaskIds}
+                        onSelectTask={handleSelectTask}
+                    />
+                )}
+
+                {isCreateModalOpen && (
+                    <TaskFormModal
+                        onSubmit={handleCreateTask}
+                        onClose={() => setIsCreateModalOpen(false)}
+                    />
+                )}
+            </div>
         </div>
     )
 }

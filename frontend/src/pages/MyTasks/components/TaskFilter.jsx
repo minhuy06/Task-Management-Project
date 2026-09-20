@@ -1,4 +1,4 @@
-const TaskFilter = ({filters, onFilterChange, categories, tags}) => {
+const TaskFilter = ({filters, onFilterChange}) => {
     return (
         <div className="task-filter-bar">
             <div className="search-box">
