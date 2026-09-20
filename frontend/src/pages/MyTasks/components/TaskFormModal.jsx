@@ -105,10 +105,10 @@ const TaskFormModal = ({onSubmit, onClose}) => {
                     <input
                         type="text"
                         name="title"
-                        value{formData.title}
+                        value={formData.title}
                         onChange={handleChange}
                         placeholder="Task name..."
-                        autoFocus=/>
+                        autoFocus />
                 </div>
 
                 {/* category input and due date */}

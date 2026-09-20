@@ -1,4 +1,4 @@
-const TaskFilter = ({filters, onFilterChange}) => {
+const TaskFilter = ({filters, onFilterChange, availableCategories, availableTags}) => {
     return (
         <div className="task-filter-bar">
             <div className="search-box">
@@ -17,18 +17,18 @@ const TaskFilter = ({filters, onFilterChange}) => {
                     <option value="completed">Completed</option>
                 </select>
 
-                <select value={filters.category} onChange={(e) => onFilterChange('category', e.target.value)}>
+                <select value={availableCategories} onChange={(e) => onFilterChange('category', e.target.value)}>
                     <option value="">All Categories</option>
-                    {categories.map((cat) => (
+                    {availableCategories.map((cat) => (
                         <option key={cat.id} value={cat.id}>
                             {cat.name}
                         </option>
                     ))}
                 </select>
 
-                <select value={filters.tag} onChange={(e) => onFilterChange('tag', e.target.value)}>
+                <select value={availableTags} onChange={(e) => onFilterChange('tag', e.target.value)}>
                     <option value="">All Tags</option>
-                    {tags.map((tag) => (
+                    {availableTags.map((tag) => (
                         <option key={tag.id} value={tag.id}>
                             {tag.name}
                         </option>

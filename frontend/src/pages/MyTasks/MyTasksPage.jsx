@@ -13,6 +13,10 @@ const MyTasksPage = () => {
         category: 'All',
         tag: 'All'
     })
+
+    const [categories, setCategories] = useState([])
+    const [tags, setTags] = useState([])
+
     const [selectedTaskIds, setSelectedTaskIds] = useState([])
     const [error, setError] = useState(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -44,9 +48,27 @@ const MyTasksPage = () => {
         }
     }
 
+    // Get categories & tags data
+    const fetchFilterData = async () => {
+        try{
+            const[tags, categories] = await Promise.all([
+                fetch('http://localhost:8080/api/tags'),
+                fetch('http://localhost:8080/api/categories')
+            ])
+
+            if(tags.ok && categories.ok){
+                setTags(await tags.json)
+                setCategories(await categories.json)
+            }
+        } catch (error){
+            setError("Unable to load Tag & Category")
+        }
+    }
+
     // API call to java
     useEffect(() => {
         fetchTasks()
+        fetchFilterData()
     }, [filters]);
 
     const handleFilterChange = (key, value) => {
@@ -122,6 +144,8 @@ const MyTasksPage = () => {
             <TaskFilter
                 filters={filters}
                 onFilterChange={handleFilterChange}
+                availableTags={tags}
+                availableCategories={categories}
             />
 
             {selectedTaskIds.length > 0 && (
@@ -159,3 +183,4 @@ const MyTasksPage = () => {
         </div>
     )
 }
+export default MyTasksPage
