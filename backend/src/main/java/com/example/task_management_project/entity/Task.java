@@ -1,5 +1,6 @@
 package com.example.task_management_project.entity;
 
+import com.example.task_management_project.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +29,9 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private boolean completed = false;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private TaskStatus status = TaskStatus.PENDING;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;

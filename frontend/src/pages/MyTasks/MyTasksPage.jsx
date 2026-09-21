@@ -21,8 +21,9 @@ const MyTasksPage = () => {
     const [error, setError] = useState(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-    const todoTasks = tasks.filter(task => !task.isCompleted)
-    const completedTasks = tasks.filter(task => task.isCompleted)
+    const pendingTasks = tasks.filter(task => task.status === 'PENDING')
+    const inProgressTasks = tasks.filter(task => task.status === 'IN_PROGRESS')
+    const completedTasks = tasks.filter(task => task.status === 'COMPLETED')
 
     const fetchTasks = async () => {
         try{
@@ -159,8 +160,15 @@ const MyTasksPage = () => {
             <div className="task-lists-container">
                 <TaskList
                     title="To do"
-                    tasks={todoTasks}
+                    tasks={pendingTasks}
                     selectedIds={selectedTaskIds}
+                    onSelectTask={handleSelectTask}
+                />
+
+                <TaskList
+                    title="In Progress"
+                    tasks={inProgressTasks}
+                    selectedTaskIds={selectedTaskIds}
                     onSelectTask={handleSelectTask}
                 />
 

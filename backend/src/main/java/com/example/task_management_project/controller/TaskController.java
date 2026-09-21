@@ -25,7 +25,11 @@ public class TaskController {
 
     // Get all task
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getAllTask(){
+    public ResponseEntity<List<TaskResponseDTO>> getTasksByQuerry(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String s
+    ){
         List<TaskResponseDTO> responseDTOS = taskService.getAllTask();
         return ResponseEntity.ok(responseDTOS);
     }

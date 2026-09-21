@@ -13,8 +13,9 @@ const TaskFilter = ({filters, onFilterChange, availableCategories, availableTags
             <div className="dropdowns">
                 <select value={filters.status} onChange={(e) => onFilterChange('status', e.target.value)}>
                     <option value="">All Status</option>
-                    <option value="todo">To Do</option>
-                    <option value="completed">Completed</option>
+                    <option value="PENDING">To Do</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
                 </select>
 
                 <select value={availableCategories} onChange={(e) => onFilterChange('category', e.target.value)}>
