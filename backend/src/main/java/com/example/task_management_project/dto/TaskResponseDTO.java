@@ -1,5 +1,6 @@
 package com.example.task_management_project.dto;
 
+import com.example.task_management_project.enums.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class TaskResponseDTO {
     private Long id;
     private String title;
     private String description;
-    private boolean completed;
+    private TaskStatus status;
     private LocalDateTime dueDate;
     private CategoryResponseDTO categoryResponseDTO;
     private List<TagResponseDTO> tagResponseDTOS;

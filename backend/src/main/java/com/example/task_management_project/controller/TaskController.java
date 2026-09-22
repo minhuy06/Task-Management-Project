@@ -3,6 +3,7 @@ package com.example.task_management_project.controller;
 import com.example.task_management_project.dto.TaskRequestDTO;
 import com.example.task_management_project.dto.TaskResponseDTO;
 import com.example.task_management_project.entity.Task;
+import com.example.task_management_project.enums.TaskStatus;
 import com.example.task_management_project.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +26,12 @@ public class TaskController {
 
     // Get all task
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getTasksByQuerry(
+    public ResponseEntity<List<TaskResponseDTO>> getTasksByQuery(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) String s
-    ){
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) String tag
+            ){
         List<TaskResponseDTO> responseDTOS = taskService.getAllTask();
         return ResponseEntity.ok(responseDTOS);
     }

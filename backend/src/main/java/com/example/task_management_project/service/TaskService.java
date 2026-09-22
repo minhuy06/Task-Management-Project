@@ -7,10 +7,13 @@ import com.example.task_management_project.dto.TaskResponseDTO;
 import com.example.task_management_project.entity.Category;
 import com.example.task_management_project.entity.Tag;
 import com.example.task_management_project.entity.Task;
+import com.example.task_management_project.enums.TaskStatus;
 import com.example.task_management_project.repository.CategoryRepository;
 import com.example.task_management_project.repository.TagRepository;
 import com.example.task_management_project.repository.TaskRepository;
+import jakarta.persistence.criteria.Join;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +33,44 @@ public class TaskService {
         this.tagRepository = tagRepository;
     }
 
+    // task filter
+    public List<TaskResponseDTO> filterTasks(String search, String category, TaskStatus status, String tag){
+        Specification<Task> spec = (root, query, cb) -> cb.conjunction();
+
+        if(search != null && !search.trim().isEmpty()){
+            spec = spec.and((root, query, cb) -> {
+                String pattern = "%" + search.trim().toLowerCase() + "%";
+                return cb.or(
+                        cb.like(cb.lower(root.get("title")), pattern),
+                        cb.like(cb.lower(root.get("description")), pattern)
+                );
+            });
+        }
+
+        if(category != null && !category.trim().isEmpty()){
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.join("category").get("name"), category)
+            );
+        }
+
+        if(status != null){
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), status)
+            );
+        }
+
+        if(tag != null && !tag.trim().isEmpty()){
+            spec = spec.and((root, query, cb) -> {
+                Join<Task, Tag> tagsJoin = root.join("tags");
+                return cb.equal(tagsJoin.get("name"), tag);
+            });
+        }
+
+        List<Task> tasks = taskRepository.findAll(spec);
+
+        return tasks.stream().map(this::mapToResponseDTO).collect(Collectors.toList());
+    }
+
     // Get all task
     public List<TaskResponseDTO> getAllTask(){
         return taskRepository.findAll()
@@ -47,8 +88,19 @@ public class TaskService {
     // Create new task
     public TaskResponseDTO createTask(TaskRequestDTO requestDTO){
         Task newTask = mapToEntity(requestDTO);
+        newTask.setStatus(TaskStatus.PENDING);
         Task createdTask = taskRepository.save(newTask);
+
         return mapToResponseDTO(createdTask);
+    }
+
+    // update TaskStatus
+    public TaskResponseDTO updateTaskStatus(Long id, TaskStatus newStatus){
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        task.setStatus(newStatus);
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponseDTO(updatedTask);
     }
 
     // Update task
@@ -57,7 +109,6 @@ public class TaskService {
 
         existingTask.setTitle(requestDTO.getTitle());
         existingTask.setDescription(requestDTO.getDescription());
-        existingTask.setCompleted(requestDTO.isCompleted());
         existingTask.setDueDate(requestDTO.getDueDate());
 
         // Update new category
@@ -99,7 +150,7 @@ public class TaskService {
         responseDTO.setId(task.getId());
         responseDTO.setTitle(task.getTitle());
         responseDTO.setDescription(task.getDescription());
-        responseDTO.setCompleted(task.isCompleted());
+        responseDTO.setStatus(task.getStatus());
         responseDTO.setDueDate(task.getDueDate());
 
         if(task.getCategory() != null){
@@ -134,7 +185,7 @@ public class TaskService {
         task.setTitle(requestDTO.getTitle());
         task.setDescription(requestDTO.getDescription());
         task.setDueDate(requestDTO.getDueDate());
-        task.setCompleted(requestDTO.isCompleted());
+        task.setStatus(requestDTO.getStatus());
 
         // Get category entity by categoryId
         if(requestDTO.getCategoryId() != null){
