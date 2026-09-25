@@ -1,4 +1,5 @@
 import { Draggable } from '@hello-pangea/dnd';
+import './TaskItem.css'
 
 const TaskItem = ({ task, index }) => {
     return (

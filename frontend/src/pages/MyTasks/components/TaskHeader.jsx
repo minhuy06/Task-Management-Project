@@ -1,3 +1,5 @@
+import './TaskHeader.css'
+
 const TaskHeader = ({activeCount, onNewTask}) => {
     return (
         <div className="task-header">

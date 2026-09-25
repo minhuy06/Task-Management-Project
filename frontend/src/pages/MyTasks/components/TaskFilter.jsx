@@ -1,3 +1,5 @@
+import './TaskFilter.css'
+
 const TaskFilter = ({filters, onFilterChange, availableCategories, availableTags}) => {
     return (
         <div className="task-filter-bar">

@@ -1,6 +1,7 @@
 import TaskItem from './TaskItem';
 import React, { useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
+import './TaskList.css'
 
 const TaskList = ({ title, tasks, statusId, isCollapsible = false }) => {
     const initialOpenState = isCollapsible ? tasks.length <= 5 : true;

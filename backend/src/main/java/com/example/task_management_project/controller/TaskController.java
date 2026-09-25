@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,7 +25,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    // Get all task
+    // filter task
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>> getTasksByQuery(
             @RequestParam(required = false) String search,
@@ -32,7 +33,7 @@ public class TaskController {
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) String tag
             ){
-        List<TaskResponseDTO> responseDTOS = taskService.getAllTask();
+        List<TaskResponseDTO> responseDTOS = taskService.filterTasks(search, category, status, tag);
         return ResponseEntity.ok(responseDTOS);
     }
 
@@ -55,6 +56,16 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskRequestDTO requestDTO){
         TaskResponseDTO responseDTO = taskService.updateTask(id, requestDTO);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    // update task status
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<TaskResponseDTO> updateTaskStatus(@PathVariable Long id, @RequestBody Map<String, String> statusUpdate){
+        String statusString = statusUpdate.get("status");
+        TaskStatus newStatus = TaskStatus.valueOf(statusString);
+
+        TaskResponseDTO updatedTask = taskService.updateTaskStatus(id, newStatus);
+        return ResponseEntity.ok(updatedTask);
     }
 
     // Delete task
