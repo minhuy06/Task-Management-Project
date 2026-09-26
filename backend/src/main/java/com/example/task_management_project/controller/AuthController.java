@@ -2,10 +2,12 @@ package com.example.task_management_project.controller;
 
 import com.example.task_management_project.dto.JwtResponseDTO;
 import com.example.task_management_project.dto.LoginRequestDTO;
+import com.example.task_management_project.dto.MessageResponseDTO;
 import com.example.task_management_project.dto.UserRequestDTO;
 import com.example.task_management_project.entity.User;
 import com.example.task_management_project.repository.UserRepository;
 import com.example.task_management_project.security.JwtUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,11 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDTO requestDTO){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO requestDTO){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword())
         );
@@ -50,11 +50,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO requestDTO) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRequestDTO requestDTO) {
 
         // check duplicate username
         if (userRepository.existsByUsername(requestDTO.getUsername())) {
-            return ResponseEntity.badRequest().body("User name is already exist");
+            return ResponseEntity.badRequest().body(new MessageResponseDTO("User name is already exist"));
         }
 
         // create new user
@@ -66,6 +66,6 @@ public class AuthController {
         // save to database
         userRepository.save(user);
 
-        return ResponseEntity.ok("Register successfully");
+        return ResponseEntity.ok(new MessageResponseDTO("Register successfully"));
     }
 }
