@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './AuthPage.css';
 import { useNavigate } from 'react-router-dom'
+import axiosClient from '../../services/axiosClient'
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true)
@@ -15,6 +16,7 @@ const AuthPage = () => {
     // error state
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigate = useNavigate()
 
@@ -38,40 +40,49 @@ const AuthPage = () => {
         }
 
         // chose API automatically
-        const url = isLogin ? 'http://localhost:8080/api/auth/login' : 'http://localhost:8080/api/auth/register'
+        const endpoint = isLogin ? '/auth/login' : '/auth/register'
 
         // package payload automatically
         const payload = isLogin ? {username, password} : {username, email, password}
 
+        setIsLoading(true)
         try{
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const data = await axiosClient.post(endpoint, payload)
+            if(isLogin){
+                const token = data.token
 
-            if(response.ok){
-                if(isLogin){
-                    const data = await response.json()
-
-                    localStorage.setItem('token', data.token)
+                if(token){
+                    localStorage.setItem('jwt_token', token)
                     localStorage.setItem('username', data.username)
                     navigate('/tasks')
                 }
-                else{
-                    setSuccessMessage("Register successfully! Please login again")
-                    setIsLogin(true)
-                    setPassword('')
-                    setConfirmPassword('')
-                }
+                setErrorMessage("Invalid token received froms server")
             }
             else{
-                const errorText = await response.text()
-                setErrorMessage(errorText || 'Having trouble')
+                // register successfully
+                setSuccessMessage(data.message || "Register successfully! Please login again")
+                setIsLogin(true)
+                setPassword('')
+                setUserName('')
             }
 
         } catch (error){
-            setErrorMessage("Unable to connect to server")
+            if(error.response && error.response.data){
+                const errData = error.response.data
+
+                if(typeof errData === 'object' && !errData.message){
+                    const firstErrorKey = Object.keys(errData)[0]
+                    setErrorMessage(errData[firstErrorKey])
+                }
+                else{
+                    setErrorMessage(errData.message || "Authentication failed")
+                }
+            }
+            else{
+                setErrorMessage("Unable to connect to server")
+            }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -99,6 +110,7 @@ const AuthPage = () => {
                                 value={username}
                                 onChange={(e) => setUserName(e.target.value)}
                                 required
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
@@ -114,6 +126,7 @@ const AuthPage = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
+                                    disabled={isLoading}
                                 />
                             </div>
                         </div>
@@ -129,6 +142,7 @@ const AuthPage = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
@@ -144,6 +158,7 @@ const AuthPage = () => {
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
+                                    disabled={isLoading}
                                 />
                             </div>
                         </div>
@@ -158,8 +173,8 @@ const AuthPage = () => {
                         </div>
                     )}
 
-                    <button type="submit" className="login-btn">
-                        {isLogin ? 'LOGIN' : 'CREATE ACCOUNT'}
+                    <button type="submit" className="login-btn" disabled={isLoading}>
+                        {isLoading ? 'PROCESSING...' : (isLogin ? 'LOGIN' : 'CREATE ACCOUNT')}
                     </button>
                 </form>
 
@@ -167,8 +182,8 @@ const AuthPage = () => {
                     {isLogin ? "Don't have an account? " : "Already have an account? "}
                     <span
                         className="signup-link"
-                        onClick={toggleAuthMode}
-                        style={{cursor: 'pointer', textDecoration: 'underline'}}
+                        onClick={!isLoading ? toggleAuthMode : undefined}
+                        style={{ cursor: isLoading ? 'not-allowed' : 'pointer', textDecoration: 'underline' }}
                     >
                         {isLogin ? "Sign Up" : "Sign In"}
                     </span>
