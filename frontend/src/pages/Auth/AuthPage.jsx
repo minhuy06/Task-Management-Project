@@ -55,8 +55,9 @@ const AuthPage = () => {
                     localStorage.setItem('jwt_token', token)
                     localStorage.setItem('username', data.username)
                     navigate('/tasks')
+                } else {
+                    setErrorMessage("Invalid token received from server")
                 }
-                setErrorMessage("Invalid token received froms server")
             }
             else{
                 // register successfully
@@ -111,6 +112,7 @@ const AuthPage = () => {
                                 onChange={(e) => setUserName(e.target.value)}
                                 required
                                 disabled={isLoading}
+                                style={{ paddingLeft: '45px' }}
                             />
                         </div>
                     </div>
@@ -127,6 +129,7 @@ const AuthPage = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     disabled={isLoading}
+                                    style={{ paddingLeft: '45px' }}
                                 />
                             </div>
                         </div>
@@ -143,6 +146,7 @@ const AuthPage = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 disabled={isLoading}
+                                style={{ paddingLeft: '45px' }}
                             />
                         </div>
                     </div>
@@ -159,6 +163,7 @@ const AuthPage = () => {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
                                     disabled={isLoading}
+                                    style={{ paddingLeft: '45px' }}
                                 />
                             </div>
                         </div>

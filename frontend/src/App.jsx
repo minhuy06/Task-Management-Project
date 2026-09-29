@@ -5,7 +5,6 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
     return (
-        <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<AuthPage/>}/>
                 <Route path="/tasks" element={
@@ -17,7 +16,6 @@ function App() {
 
                 <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
-        </BrowserRouter>
     );
 }
 

@@ -9,7 +9,7 @@ const axiosClient = axios.create({
     timeout: 10000
 })
 
-axios.interceptors.request.use(
+axiosClient.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('jwt_token')
         if(token){
@@ -20,9 +20,9 @@ axios.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
-axios.interceptors.response.use(
+axiosClient.interceptors.response.use(
     (response) => {
-        response.data
+        return response.data
     },
     (error) => {
         if(error.response && error.response.status === 401){
