@@ -21,12 +21,12 @@ const TaskItem = ({ task, index }) => {
                         <div className="task-title">{task.title}</div>
                         <div className="task-meta">
                             (due <span className={`due-date ${task.isUrgent ? 'text-red' : ''}`}>{task.dueDate}</span>,
-                            in {task.category})
+                            in {task.categoryResponseDTO?.name || 'No Category'})
                         </div>
                     </div>
 
                     <div className="task-item-right">
-                        {task.tags && task.tags.map(tag => (
+                        {task.tagResponseDTOS && task.tagResponseDTOS.map(tag => (
                             <span key={tag.id} className="tag-pill" style={{backgroundColor:tag.color, color:'#ffffff'}}>
                                 #{tag.name}
                             </span>
