@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallBack} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import axiosClient from '../services/axiosClient'
 
 export const useTasks = (filters) => {
@@ -7,7 +7,7 @@ export const useTasks = (filters) => {
     const [tags, setTags] = useState([])
     const [error, setError] = useState([])
 
-    const fetchTasks = useCallBack(async () => {
+    const fetchTasks = useCallback(async () => {
         try{
             setError(null)
             const params = {
@@ -23,13 +23,13 @@ export const useTasks = (filters) => {
         }
     }, [filters])
 
-    const fetchFilterData = useCallBack(async () => {
+    const fetchFilterData = useCallback(async () => {
         try{
             const [tagsData, categoriesData] = await Promise.all([
                 axiosClient.get('/tags'),
                 axiosClient.get('/categories')
             ])
-            setTasks(tagsData)
+            setTags(tagsData)
             setCategories(categoriesData)
         } catch (error){
             setError("Unable to load tag and category")
@@ -39,7 +39,7 @@ export const useTasks = (filters) => {
     const createTask = async (newTaskData) => {
         try{
             setError(null)
-            await axiosClient.post('/tasks', {newTaskData})
+            await axiosClient.post('/tasks', newTaskData)
             fetchTasks()
             return true
         } catch (err){

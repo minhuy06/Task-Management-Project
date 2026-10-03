@@ -6,7 +6,7 @@ const TaskFormModal = ({ onSubmit, onClose, availableTags, availableCategories }
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: availableCategories && availableCategories.length > 0 ? availableCategories[0].name : '',
+        categoryId: availableCategories && availableCategories.length > 0 ? availableCategories[0].id : '',
         tagIds: [],
         dueDate: ''
     });
@@ -37,7 +37,15 @@ const TaskFormModal = ({ onSubmit, onClose, availableTags, availableCategories }
             alert("Title must be filled!");
             return;
         }
-        onSubmit(formData);
+
+        const submitData = { ...formData };
+        if (submitData.dueDate) {
+            submitData.dueDate = `${submitData.dueDate}T23:59:59`;
+        } else {
+            submitData.dueDate = null;
+        }
+
+        onSubmit(submitData);
     };
 
     return (
@@ -65,9 +73,9 @@ const TaskFormModal = ({ onSubmit, onClose, availableTags, availableCategories }
                     <div className="form-row">
                         <div className="form-group">
                             <label>Category</label>
-                            <select name="category" value={formData.category} onChange={handleChange}>
+                            <select name="categoryId" value={formData.categoryId} onChange={handleChange}>
                                 {availableCategories.map(cat => (
-                                    <option key={cat.id} value={cat.name}>
+                                    <option key={cat.id} value={cat.id}>
                                         {cat.name}
                                     </option>
                                 ))}

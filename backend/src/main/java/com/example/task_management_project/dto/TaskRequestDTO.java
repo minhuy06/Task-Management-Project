@@ -30,7 +30,7 @@ public class TaskRequestDTO {
     private LocalDateTime dueDate;
 
     @NotNull(message = "Task status is required")
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.PENDING;
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;

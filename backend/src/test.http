@@ -36,12 +36,11 @@ Content-Type: application/json
 # Thử gọi vào API lấy danh sách user.
 # Biến {{auth_token}} sẽ tự động lấy Token vừa sinh ra ở Bước 2 đắp vào đây.
 GET http://localhost:8080/api/users
-Authorization: Bearer {{auth_token}}
 
 ### Tạo Category: Công việc nhà
 POST http://localhost:8080/api/categories
 Content-Type: application/json
-
+Authorization: Bearer {{auth_token}}
 {
   "name": "Công việc nhà"
 }
@@ -49,7 +48,7 @@ Content-Type: application/json
 ### Tạo Category: Học tập
 POST http://localhost:8080/api/categories
 Content-Type: application/json
-
+Authorization: Bearer {{auth_token}}
 {
   "name": "Học tập"
 }
@@ -57,7 +56,7 @@ Content-Type: application/json
 ### Tạo Category: Dự án cá nhân
 POST http://localhost:8080/api/categories
 Content-Type: application/json
-
+Authorization: Bearer {{auth_token}}
 {
   "name": "Dự án cá nhân"
 }

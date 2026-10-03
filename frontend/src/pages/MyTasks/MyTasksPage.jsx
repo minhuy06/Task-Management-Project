@@ -4,7 +4,7 @@ import TaskHeader from './components/TaskHeader';
 import TaskFilter from './components/TaskFilter';
 import TaskList from './components/TaskList';
 import TaskFormModal from './components/TaskFormModal';
-import { useTasks } from '../hooks/useTasks';
+import { useTasks } from '../../hooks/useTasks';
 import './MyTasksPage.css';
 
 const MyTasksPage = () => {

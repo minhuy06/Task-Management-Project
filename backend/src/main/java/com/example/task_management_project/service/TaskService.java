@@ -7,10 +7,12 @@ import com.example.task_management_project.dto.TaskResponseDTO;
 import com.example.task_management_project.entity.Category;
 import com.example.task_management_project.entity.Tag;
 import com.example.task_management_project.entity.Task;
+import com.example.task_management_project.entity.User;
 import com.example.task_management_project.enums.TaskStatus;
 import com.example.task_management_project.repository.CategoryRepository;
 import com.example.task_management_project.repository.TagRepository;
 import com.example.task_management_project.repository.TaskRepository;
+import com.example.task_management_project.repository.UserRepository;
 import jakarta.persistence.criteria.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,17 +27,24 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository, TagRepository tagRepository){
+    public TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository, TagRepository tagRepository, UserRepository userRepository){
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
+        this.userRepository = userRepository;
+    }
+
+    public Task getTaskEntityByIdAndUserId(Long id, Long userId){
+        return taskRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Task not found or permission denied!"));
     }
 
     // task filter
-    public List<TaskResponseDTO> filterTasks(String search, String category, TaskStatus status, String tag){
-        Specification<Task> spec = (root, query, cb) -> cb.conjunction();
+    public List<TaskResponseDTO> filterTasks(String search, String category, TaskStatus status, String tag, Long userId){
+        Specification<Task> spec = (root, query, cb) -> cb.equal(root.get("user").get("id"), userId);
 
         if(search != null && !search.trim().isEmpty()){
             spec = spec.and((root, query, cb) -> {
@@ -71,23 +80,19 @@ public class TaskService {
         return tasks.stream().map(this::mapToResponseDTO).collect(Collectors.toList());
     }
 
-    // Get all task
-    public List<TaskResponseDTO> getAllTask(){
-        return taskRepository.findAll()
-                .stream()
-                .map(this::mapToResponseDTO)
-                .collect(Collectors.toList());
-    }
-
     // Get task by id
-    public TaskResponseDTO getTaskById(Long id){
-        Task task = getTaskEntityById(id);
+    public TaskResponseDTO getTaskById(Long id, Long userId){
+        Task task = getTaskEntityByIdAndUserId(id, userId);
         return mapToResponseDTO(task);
     }
 
     // Create new task
-    public TaskResponseDTO createTask(TaskRequestDTO requestDTO){
+    public TaskResponseDTO createTask(TaskRequestDTO requestDTO, Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Task newTask = mapToEntity(requestDTO);
+        newTask.setUser(user);
         newTask.setStatus(TaskStatus.PENDING);
         Task createdTask = taskRepository.save(newTask);
 
@@ -95,8 +100,8 @@ public class TaskService {
     }
 
     // update TaskStatus
-    public TaskResponseDTO updateTaskStatus(Long id, TaskStatus newStatus){
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+    public TaskResponseDTO updateTaskStatus(Long id, TaskStatus newStatus, Long userId){
+        Task task = getTaskEntityByIdAndUserId(id, userId);
         task.setStatus(newStatus);
         Task updatedTask = taskRepository.save(task);
 
@@ -104,8 +109,8 @@ public class TaskService {
     }
 
     // Update task
-    public TaskResponseDTO updateTask(Long id, TaskRequestDTO requestDTO){
-        Task existingTask = getTaskEntityById(id);
+    public TaskResponseDTO updateTask(Long id, TaskRequestDTO requestDTO, Long userId){
+        Task existingTask = getTaskEntityByIdAndUserId(id, userId);
 
         existingTask.setTitle(requestDTO.getTitle());
         existingTask.setDescription(requestDTO.getDescription());
@@ -133,14 +138,9 @@ public class TaskService {
     }
 
     // Delete task
-    public void deleteTask(Long id) {
-        Task existingTask = getTaskEntityById(id);
+    public void deleteTask(Long id, Long userid) {
+        Task existingTask = getTaskEntityByIdAndUserId(id, userid);
         taskRepository.delete(existingTask);
-    }
-
-    // Get task by Id (internal)
-    public Task getTaskEntityById(Long id){
-        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found with Id: "+id));
     }
 
     // Mapping Entity to DTO
