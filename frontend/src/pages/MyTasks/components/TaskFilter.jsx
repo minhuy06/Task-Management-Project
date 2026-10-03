@@ -33,7 +33,7 @@ const TaskFilter = ({filters, onFilterChange, availableCategories, availableTags
                 <select value={filters.tag} onChange={(e) => onFilterChange('tag', e.target.value)}>
                     <option value="All">All Tags</option>
                     {availableTags.map((tag) => (
-                        <option key={tag.id} value={tag.id}>
+                        <option key={tag.id} value={tag.name}>
                             {tag.name}
                         </option>
                     ))}

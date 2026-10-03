@@ -56,9 +56,7 @@ const MyTasksPage = () => {
                 <div className="task-lists-container">
                     <TaskList title="To do" statusId="PENDING" tasks={pendingTasks} isCollapsible={true} />
                     <TaskList title="In Progress" statusId="IN_PROGRESS" tasks={inProgressTasks} />
-                    {completedTasks.length > 0 && (
-                        <TaskList title="Completed" statusId="COMPLETED" tasks={completedTasks} isCollapsible={true} />
-                    )}
+                    <TaskList title="Completed" statusId="COMPLETED" tasks={completedTasks} isCollapsible={true} />
                 </div>
             </DragDropContext>
 

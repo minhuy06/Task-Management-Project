@@ -28,10 +28,10 @@
 }
 
 /* Slide effect */
-.task-items-container {
+.task-list-wrapper {
     display: grid;
     transition: grid-template-rows 0.3s ease-out;
 }
-.task-items-container.expanded { grid-template-rows: 1fr; }
-.task-items-container.collapsed { grid-template-rows: 0fr; }
-.task-items-container > div { overflow: hidden; }
+.task-list-wrapper.expanded { grid-template-rows: 1fr; }
+.task-list-wrapper.collapsed { grid-template-rows: 0fr; }
+.task-list-wrapper > .task-items-container { overflow: hidden; }

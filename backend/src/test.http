@@ -20,17 +20,11 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser",
-  "password": "123456password"
+  "username": "minhuy",
+  "password": "123456"
 }
 
-> {%
-    client.test("Đăng nhập thành công và có Token", function() {
-        client.assert(response.status === 200, "Sai thông tin đăng nhập");
-        // Tự động lưu token vào biến môi trường của IntelliJ để dùng cho bước 3
-        client.global.set("auth_token", response.body.token);
-    });
-%}
+
 
 ### 3. TEST TRUY CẬP VÀO KHU VỰC BẢO MẬT BẰNG TOKEN
 # Thử gọi vào API lấy danh sách user.
@@ -39,8 +33,9 @@ GET http://localhost:8080/api/users
 
 ### Tạo Category: Công việc nhà
 POST http://localhost:8080/api/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+
 {
   "name": "Công việc nhà"
 }
@@ -48,7 +43,8 @@ Authorization: Bearer {{auth_token}}
 ### Tạo Category: Học tập
 POST http://localhost:8080/api/categories
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
+
 {
   "name": "Học tập"
 }
@@ -56,7 +52,8 @@ Authorization: Bearer {{auth_token}}
 ### Tạo Category: Dự án cá nhân
 POST http://localhost:8080/api/categories
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
+
 {
   "name": "Dự án cá nhân"
 }
@@ -68,6 +65,7 @@ Authorization: Bearer {{auth_token}}
 
 ### Tạo Tag: Khẩn cấp (Màu đỏ)
 POST http://localhost:8080/api/tags
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
 Content-Type: application/json
 
 {
@@ -77,6 +75,7 @@ Content-Type: application/json
 
 ### Tạo Tag: Quan trọng (Màu cam)
 POST http://localhost:8080/api/tags
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
 Content-Type: application/json
 
 {
@@ -86,6 +85,7 @@ Content-Type: application/json
 
 ### Tạo Tag: Thư giãn (Màu xanh lá)
 POST http://localhost:8080/api/tags
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaW5odXkiLCJpYXQiOjE3OTEwNDA2MzMsImV4cCI6MTc5MTEyNzAzM30.wQugI0KED6c3RqrczXqQCCXvdyrcnCRGa2VaNTfi8Cg
 Content-Type: application/json
 
 {

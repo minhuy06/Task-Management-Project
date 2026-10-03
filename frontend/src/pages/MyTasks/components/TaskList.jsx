@@ -18,19 +18,21 @@ const TaskList = ({ title, tasks, statusId, isCollapsible = false }) => {
 
             <Droppable droppableId={statusId}>
                 {(provided) => (
-                    <div
-                        className={`task-items-container ${isOpen ? 'expanded' : 'collapsed'}`}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                    >
-                        {tasks.length === 0 ? (
-                            <p className="empty-text">Không có công việc nào</p>
-                        ) : (
-                            tasks.map((task, index) => (
-                                <TaskItem key={task.id} task={task} index={index} />
-                            ))
-                        )}
-                        {provided.placeholder}
+                    <div className={`task-list-wrapper ${isOpen ? 'expanded' : 'collapsed'}`}>
+                        <div
+                            className="task-items-container"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {tasks.length === 0 ? (
+                                <p className="empty-text">Không có công việc nào</p>
+                            ) : (
+                                tasks.map((task, index) => (
+                                    <TaskItem key={task.id} task={task} index={index} />
+                                ))
+                            )}
+                            {provided.placeholder}
+                        </div>
                     </div>
                 )}
             </Droppable>
