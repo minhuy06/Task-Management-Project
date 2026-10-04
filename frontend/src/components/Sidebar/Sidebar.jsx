@@ -1,204 +1,77 @@
 import React, {useState, useEffect} from 'react'
 import './Sidebar.css'
-import { FiMenu, FiSettings, FiUser, FiFolder, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { MdOutlineDashboard, MdOutlineTaskAlt, MdOutlineCalendarToday } from 'react-icons/md';
+import {NavLink} from 'react-router-dom'
+import axiosClient from '../../services/axiosClient'
 
 const Sidebar = () => {
 
     // Data States
-    const [categories, setCategories] = useState([])
-    const [tags, setTags] = useState([])
-
-    // State for category form
-    const [isCategoryPopupOpen, setIsCategoryPopupOpen] = useState(false)
-    const [newCategoryName, setNewCategoryName] = useState('')
-
-    // State for tag form
-    const [isTagPopupOpen, setIsTagPopupOpen] = useState(false)
-    const [newTagName, setNewTagName] = useState('')
-    const [newTagColor, setNewTagColor] = useState('#007bff') // default green
-
-    // Sidebar States
-    const [isCategoriesOpen, setIsCategoriesOpen] = useState(true)
-    const [isTagsOpen, setIsTagsOpen] = useState(true)
+    const [categoryCount, setCategoryCount] = useState([])
+    const [tagCount, setTagCount] = useState([])
 
     useEffect(() => {
-        fetchCategory()
-        fetchTag()
+        fetchSummaryData()
     }, []);
 
-    const fetchCategory = async () => {
+    const fetchSummaryData = async () => {
         try{
-            const response = await fetch('http://localhost:8080/api/categories')
-            const data = await response.json()
-            setCategories(data)
+            const [categoriesData, tagsData] = await Promise.all([
+                axiosClient.get('/categories'),
+                axiosClient.get('/tags')
+            ])
+            setCategoryCount(categoriesData.length)
+            setTagCount(tagsData.length)
         } catch (error){
-            console.error("Catched trouble when loading Category: ", error)
+            consol.error("Unable to load summary data", error)
         }
     }
 
-    const fetchTag = async () => {
-        try{
-            const response = await fetch('http://localhost:8080/api/tags')
-            const data = await response.json()
-            setTags(data)
-        } catch (error){
-            console.error("Catched trouble when loading Tag: ", error)
-        }
-    }
-
-    // Create new Category
-    const handleCreateCategory = async (e) => {
-        e.preventDefault()
-        try{
-            const response = await fetch('http://localhost:8080/api/categories', {
-                method : 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name: newCategoryName})
-            })
-
-            if(response.ok){
-                const newCategory = await response.json()
-                setCategories([...categories, newCategory])
-                setNewCategoryName('')
-                setIsCategoryPopupOpen(false)
-            }
-        } catch (error){
-            console.error("Can't create a new Category")
-        }
-    }
-
-    // Create new Tag
-    const handleCreateTag = async (e) => {
-        e.preventDefault()
-        try{
-            const response = await fetch('http://localhost:8080/api/tags', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name: newTagName, color: newTagColor})
-            })
-
-            if(response.ok){
-                const newTag = await response.json()
-                setTags([...tags, newTag])
-                setNewTagName('')
-                setNewTagColor('#007bff')
-                setIsTagPopupOpen(false)
-            }
-        } catch (error){
-            console.error("Can't create a new Tag")
-        }
-    }
-
-
-
-    return(
-        <div className="slibar">
-
-            {/* Tasks */}
-            <div className="section-tasks">
-                <ul>
-                    <li style={{ fontWeight: 'bold', color: '#007bff', cursor: 'pointer', fontSize: '18px' }}>
-                        Tasks
-                    </li>
-                </ul>
+    return (
+        <div className="sidebar">
+            <div className="sidebar-header" style={{ padding: '20px', fontSize: '24px', fontWeight: 'bold', color: '#1a4a84' }}>
+                TM CoreTask
             </div>
 
-            <hr className="divider" />
+            <nav className="sidebar-nav" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '0 15px' }}>
+                <NavLink
+                    to="/tasks"
+                    style={({isActive}) => ({
+                        padding: '12px 15px', textDecoration: 'none', color: isActive ? '#007bff' : '#333',
+                        fontWeight: isActive ? 'bold' : 'normal', backgroundColor: isActive ? '#e6f2ff' : 'transparent',
+                        borderRadius: '8px'
+                    })}
+                >
+                    My Tasks
+                </NavLink>
 
-            {/* Category */}
-            <div className="section-categories">
-                <h3>Category</h3>
-                <ul>
-                    {categories.map(category => (
-                        <li key={category.id}>
-                            {category.name} <span>({category.count})</span>
-                        </li>
-                    ))}
-                </ul>
-                <button className="btn-add" onClick={() => setIsCategoryPopupOpen(true)}>
-                    + Add Category
-                </button>
-            </div>
+                <NavLink
+                    to="/categories"
+                    style={({isActive}) => ({
+                        padding: '12px 15px', textDecoration: 'none', color: isActive ? '#007bff' : '#333',
+                        fontWeight: isActive ? 'bold' : 'normal', backgroundColor: isActive ? '#e6f2ff' : 'transparent',
+                        borderRadius: '8px', display: 'flex', justifyContent: 'space-between'
+                    })}
+                >
+                    <span>Categories</span>
+                    <span style={{ background: '#eee', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
+                        {categoryCount}
+                    </span>
+                </NavLink>
 
-            <hr className="divider" />
-
-            {/* Tag */}
-            <div className="section-tags">
-                <h3>Tag</h3>
-                {tags.map(tag => (
-                    <li key={tag.id} style={{ display: 'flex', alignItems: 'center', margin: '12px 0' }}>
-                        <span
-                            className="tag-badge"
-                            style={{ backgroundColor: tag.color }}
-                        >
-                            {tag.name}
-                        </span>
-
-                        <span style={{ marginLeft: '8px', color: 'gray', fontSize: '14px' }}>
-                            ({tag.count})
-                        </span>
-                    </li>
-                ))}
-                <button className="btn-add" onClick={() => setIsTagPopupOpen(true)}>
-                    + Add Tag
-                </button>
-            </div>
-
-            {/* Popup create Category */}
-            {isCategoryPopupOpen && (
-                <div className="popup-overlay">
-                    <div className="popup-content">
-                        <div className="popup-content">
-                            <h4>Create new Category</h4>
-                            <form onSubmit={handleCreateCategory}>
-                                <input
-                                    type="text"
-                                    placeholder="Category name..."
-                                    value={newCategoryName}
-                                    onChange={(e) => setNewCategoryName(e.target.value)}
-                                    required
-                                />
-                                <div className="popup-actions">
-                                    <button type="submit" className="btn-save">Save</button>
-                                    <button type="button" className="btn-cancel" onClick={() => setIsCategoryPopupOpen(false)}>Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Popup create Tag */}
-            {isTagPopupOpen && (
-                <div className="popup-overlay">
-                    <div className="popup-content">
-                        <h4>Create new Tag</h4>
-                        <form onSubmit={handleCreateTag}>
-                            <input
-                                type="text"
-                                placeholder="Tag name..."
-                                value={newTagName}
-                                onChange={(e) => setNewTagName(e.target.value)}
-                                required
-                            />
-                            <label style={{ display: 'block', margin: '10px 0 5px', fontSize: '14px', color: '#555' }}>
-                                Select color:
-                            </label>
-                            <input
-                                type="color"
-                                value={newTagColor}
-                                onChange={(e) => setNewTagColor(e.target.value)}
-                                style={{ width: '100%', height: '40px', padding: '0', cursor: 'pointer', border: '1px solid #ccc' }}
-                            />
-                            <div className="popup-actions" style={{ marginTop: '15px' }}>
-                                <button type="submit" className="btn-save">Save</button>
-                                <button type="button" className="btn-cancel" onClick={() => setIsTagPopupOpen(false)}>Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+                <NavLink
+                    to="/tags"
+                    style={({isActive}) => ({
+                        padding: '12px 15px', textDecoration: 'none', color: isActive ? '#007bff' : '#333',
+                        fontWeight: isActive ? 'bold' : 'normal', backgroundColor: isActive ? '#e6f2ff' : 'transparent',
+                        borderRadius: '8px', display: 'flex', justifyContent: 'space-between'
+                    })}
+                >
+                    <span>Tags</span>
+                    <span style={{ background: '#eee', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
+                        {tagCount}
+                    </span>
+                </NavLink>
+            </nav>
         </div>
     )
 }
