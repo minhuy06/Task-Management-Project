@@ -4,19 +4,22 @@ import MyTasksPage from './pages/MyTasks/MyTasksPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import TagManagementPage from './pages/Tag/TagManagementPage'
 import CategoryManagementPage from './pages/Category/CategoryManagementPage'
+import MainLayout from './components/MainLayout'
 
 function App() {
     return (
             <Routes>
                 <Route path="/login" element={<AuthPage/>}/>
-                <Route path="/tasks" element={
+                <Route element={
                     <ProtectedRoute>
-                        <MyTasksPage/>
+                        <MainLayout />
                     </ProtectedRoute>
-                }
-                />
-                <Route path="/categories" element={<CategoryManagementPage />} />
-                <Route path="/tags" element={<TagManagementPage />} />
+                }>
+                    <Route path="/tasks" element={<MyTasksPage />} />
+                    <Route path="/categories" element={<CategoryManagementPage />} />
+                    <Route path="/tags" element={<TagManagementPage />} />
+                </Route>
+
                 <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
     );
