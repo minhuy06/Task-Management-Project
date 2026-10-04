@@ -4,15 +4,19 @@ import com.example.task_management_project.dto.TagResponseDTO;
 import com.example.task_management_project.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
     @Query("select new com.example.task_management_project.dto.TagResponseDTO(tg.id, tg.name, tg.color, COUNT(t.id)) "+
-    "from Tag tg LEFT JOIN tg.tasks t " +
+    "from Tag tg LEFT JOIN tg.tasks t " + "where tg.user.id = :userId " +
     "GROUP BY tg.id, tg.name, tg.color")
-    List<TagResponseDTO> findAllTagsWithTaskCount();
+    List<TagResponseDTO> findAllTagsWithTaskCount(@Param("userId") Long userId);
+
+    Optional<Tag> findByIdAndUserId(Long id,Long userId);
 }

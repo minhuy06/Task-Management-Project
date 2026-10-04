@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tags")
+@Table(name = "tags", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "user_id"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,11 +24,15 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(nullable = false)
     private String color;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore

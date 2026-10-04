@@ -37,7 +37,7 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    public Task getTaskEntityByIdAndUserId(Long id, Long userId){
+    private Task getTaskEntityByIdAndUserId(Long id, Long userId){
         return taskRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Task not found or permission denied!"));
     }
