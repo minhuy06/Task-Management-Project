@@ -13,6 +13,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("select new com.example.task_management_project.dto.CategoryResponseDTO(c.id, c.name, COUNT(t.id)) " +
             "from Category c LEFT JOIN Task t on t.category.id = c.id " +
+            "where c.user.id = :userId " +
             "group by c.id, c.name")
-    List<CategoryResponseDTO> findAllCategoriesWithTaskCount();
+    List<CategoryResponseDTO> findAllCategoriesWithTaskCountByUserId(Long userId);
+
+    java.util.Optional<Category> findByIdAndUserId(Long id, Long userId);
 }

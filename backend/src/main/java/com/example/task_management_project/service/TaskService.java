@@ -91,7 +91,7 @@ public class TaskService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Task newTask = mapToEntity(requestDTO);
+        Task newTask = mapToEntity(requestDTO, userId);
         newTask.setUser(user);
         newTask.setStatus(TaskStatus.PENDING);
         Task createdTask = taskRepository.save(newTask);
@@ -118,7 +118,7 @@ public class TaskService {
 
         // Update new category
         if(requestDTO.getCategoryId() != null ){
-            Category category = categoryRepository.findById(requestDTO.getCategoryId())
+            Category category = categoryRepository.findByIdAndUserId(requestDTO.getCategoryId(), userId)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
 
             existingTask.setCategory(category);
@@ -179,7 +179,7 @@ public class TaskService {
     }
 
     // Mapping DTO to Entity
-    public Task mapToEntity(TaskRequestDTO requestDTO){
+    public Task mapToEntity(TaskRequestDTO requestDTO, Long userId){
         Task task = new Task();
 
         task.setTitle(requestDTO.getTitle());
@@ -189,7 +189,7 @@ public class TaskService {
 
         // Get category entity by categoryId
         if(requestDTO.getCategoryId() != null){
-            Category category = categoryRepository.findById(requestDTO.getCategoryId())
+            Category category = categoryRepository.findByIdAndUserId(requestDTO.getCategoryId(), userId)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             task.setCategory(category);
         }
