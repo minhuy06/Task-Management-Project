@@ -1,0 +1,184 @@
+.tag-page-container {
+    padding: 32px;
+    background-color: #f4f6f8;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.tag-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.tag-page-header h2 {
+    margin: 0;
+    color: #1a4a84;
+    font-size: 24px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Bảng dữ liệu */
+.tag-table-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.tag-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tag-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.tag-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+    color: #333;
+    vertical-align: middle;
+}
+
+.tag-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Hiển thị màu sắc */
+.color-preview {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Nút thao tác */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-edit, .btn-delete {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-edit { color: #28a745; }
+.btn-edit:hover { background-color: #e6f4ea; }
+
+.btn-delete { color: #dc3545; }
+.btn-delete:hover { background-color: #fce8e6; }
+
+/* Trạng thái rỗng */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Form Popup (Modal) */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
+    font-size: 14px;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group input[type="color"] {
+    width: 100%;
+    height: 40px;
+    padding: 2px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-cancel {
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-cancel:hover { background-color: #dde2e6; }
